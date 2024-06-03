@@ -1,6 +1,4 @@
-	
 B19013_001 - med household income tot.
-
 
 total_pop = B01001_001,
 white_pop = B02001_002,
