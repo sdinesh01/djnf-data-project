@@ -1,2 +1,0 @@
-# djnf-data-project
- 
