@@ -1,0 +1,64 @@
+---
+title: "tidycensus_data"
+author: "Shradha Dinesh"
+date: "2024-06-03"
+output: html_document
+---
+
+# Set up
+
+```{r}
+library(tidyverse)
+library(tidycensus)
+library(janitor)
+```
+
+```{r}
+# set api key for tidycensus
+# census_api_key("bfa9ab659f49cf70e25323523f09670cbe4b98e5", install=TRUE)
+# commenting out since already stored
+```
+
+# Identify variables to pull
+
+```{r}
+# code from https://github.com/smussenden/tidycensus_example/blob/master/tidycensus.Rmd
+
+## Get list of states (Exclude non-states, except DC)
+states <- fips_codes %>%
+  select(state) %>%
+  distinct() %>%
+  head(51) %>%
+  as_vector() 
+
+counties <- fips_codes %>% 
+            select(county) %>% 
+            distinct() %>% 
+            as_vector()
+
+# Get census tract data for all states
+census_tract_stats <- get_acs(geography = "tract", variables = c( "B01001_001","B02001_002","B02001_003","B02001_004","B03001_003","B06012_002","B19013_001"), state=states, year = 2022) %>%
+  select(GEOID, variable, estimate) %>%
+  pivot_wider(names_from=variable, values_from=estimate) %>%
+  rename(
+    total_pop = B01001_001,
+    white_pop = B02001_002,
+    black_pop = B02001_003,
+    native_pop = B02001_004,
+    hispanic_pop = B03001_003,
+    poverty_pop = B06012_002,
+    median_income = B19013_001
+  ) %>%
+  mutate(pct_white = round(white_pop/total_pop,2)*100,
+         pct_nonwhite = 100-round(white_pop/total_pop,2)*100,
+         pct_black = round(black_pop/total_pop,2)*100,
+         pct_native = round(native_pop/total_pop,2)*100,
+         pct_hispanic = round(hispanic_pop/total_pop,2)*100,
+         pct_poverty = round(poverty_pop/total_pop,2)*100
+         ) %>%
+  clean_names() %>%
+  select(geoid, -ends_with("pop"), starts_with("pct"),median_income)
+```
+
+
+
