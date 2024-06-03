@@ -1,9 +1,0 @@
-B19013_001 - med household income tot.
-
-total_pop = B01001_001,
-white_pop = B02001_002,
-black_pop = B02001_003,
-native_pop = B02001_004,
-hispanic_pop = B03001_003,
-poverty_pop = B06012_002,
-median_income = B19013_001
