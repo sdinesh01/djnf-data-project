@@ -9,13 +9,18 @@ output: html_document
 
 I will work on learning the TidyCensus R package to retrieve demographic data for all census tracts and counties nationally. Later, I will work with train route shapefiles, creating buffers and performing a spatial join to merge our demographic and geographic data. By the end of this week, I will have completed a high-level summary analysis of demographics for a few cities/towns along a specific coal (or train) route. 
 
+
 Stories about particulate pollution in the industrial sector have described the air, earth, and our waterways. This would be the first comprehensive look at towns along coal transportation routes -- particularly prescient in the wake of major freight derailments, contamination events, and discussions about regulating the length and staff numbers aboard freight transport. 
+
 
 The potential impact of this project could be increased investment (social and financial) for particulate monitoring sensors along transportation hubs and/or increased industrial regulation for coal transporters. The social impact would be increasing the public awareness of industrial air pollution or providing an explanation for the phenomenon in affected communities. 
 
+
 This story would feature visual components like maps and other data graphics and photos and videos of coal trains and transportation routes. 
 
+
 To complete this high level demographic analysis, I will need to begin working with train route shapefiles as a next step. 
+
 
 Below, I have provided the code to produce dataframes with county and tract level demographic information, including race/ethnicity, poverty rate, and median income. These dataframes are stored in the `census_tract_stats` and `census_county_stats` variables. 
 
