@@ -1,0 +1,79 @@
+---
+title: "coal_exports"
+author: "Shradha Dinesh"
+date: "2024-06-04"
+output: html_document
+---
+
+## import libraries
+
+```{r}
+library(tigris)
+library(sf)
+library(leaflet)
+library(tidyverse)
+library(janitor)
+library(tidycensus)
+```
+
+## data import
+
+In Excel, I filtered the original global dataset to only coal export locations in the United States. That is the dataset that is imported here. The original data can be found and downloaded [here](https://globalenergymonitor.org/projects/global-coal-terminals-tracker/).
+
+```{r}
+data = read.csv("data/coal-export-terminals-us.csv")
+data
+```
+```{r}
+# Download the census tract shapefiles for all states from tigris package
+
+census_tracts_us <- tracts(cb=TRUE)
+
+census_tracts_us <-  st_transform(census_tracts_us, 4269)
+
+# save the tract level shapefiles to the working data directory
+
+st_write(census_tracts_us, "data/all_census_tracts_us.shp")
+```
+
+
+### initialize a point map with leaflet 
+
+
+```{r}
+
+# Load point data
+
+points_sf <- st_as_sf(data, coords = c("Longitude", "Latitude"), crs = 4269)
+
+# Load census tract shapefiles
+census_tracts <- st_read("data/all_census_tracts_us.shp")
+
+
+
+```
+
+
+```{r}
+# Create the map
+map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+  addTiles() %>%
+  setView(lng = -96.25, lat = 39.50, zoom = 4) %>% 
+  addPolygons(data = tracts,
+              fillColor = "lightgray",
+              color = "gray",
+              weight = 1,
+              fillOpacity = 0.5) %>% 
+  addCircleMarkers(
+              data = points_sf,
+             color = "red",
+             opacity = 0.8,
+             weight = 2,
+             radius = 5)
+  )
+```
+```{r}
+map
+```
+
+
