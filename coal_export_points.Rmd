@@ -27,13 +27,13 @@ data
 ```{r}
 # Download the census tract shapefiles for all states from tigris package
 
-census_tracts_us <- tracts(cb=TRUE)
+#census_tracts_us <- tracts(cb=TRUE)
 
-census_tracts_us <-  st_transform(census_tracts_us, 4269)
+#census_tracts_us <-  st_transform(census_tracts_us, 4269)
 
 # save the tract level shapefiles to the working data directory
-
-st_write(census_tracts_us, "data/all_census_tracts_us.shp")
+# commenting out since file exists
+# st_write(census_tracts_us, "data/all_census_tracts_us.shp")
 ```
 
 
@@ -59,7 +59,7 @@ census_tracts <- st_read("data/all_census_tracts_us.shp")
 map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
   addTiles() %>%
   setView(lng = -96.25, lat = 39.50, zoom = 4) %>% 
-  addPolygons(data = tracts,
+  addPolygons(data = census_tracts,
               fillColor = "lightgray",
               color = "gray",
               weight = 1,
