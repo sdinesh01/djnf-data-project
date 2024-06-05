@@ -34,6 +34,16 @@ data
 # save the tract level shapefiles to the working data directory
 # commenting out since file exists
 # st_write(census_tracts_us, "data/all_census_tracts_us.shp")
+
+# we're repeating the above process but with counties
+# keep the tract shapefiles in our data directory so we can do a more granular analysis locally
+
+census_counties_us <- counties(cb=TRUE)
+census_counties_us <-  st_transform(census_counties_us, 4269)
+
+# save county-level shapes to the working data directory
+# commenting out since file exists
+st_write(census_counties_us, "data/all_census_counties_us.shp")
 ```
 
 
@@ -47,7 +57,10 @@ data
 points_sf <- st_as_sf(data, coords = c("Longitude", "Latitude"), crs = 4269)
 
 # Load census tract shapefiles
-census_tracts <- st_read("data/all_census_tracts_us.shp")
+#census_tracts <- st_read("data/all_census_tracts_us.shp")
+
+# Load census county shapefiles
+census_counties <- st_read("data/all_census_counties_us.shp")
 
 
 
@@ -59,7 +72,7 @@ census_tracts <- st_read("data/all_census_tracts_us.shp")
 map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
   addTiles() %>%
   setView(lng = -96.25, lat = 39.50, zoom = 4) %>% 
-  addPolygons(data = census_tracts,
+  addPolygons(data = census_counties,
               fillColor = "lightgray",
               color = "gray",
               weight = 1,
