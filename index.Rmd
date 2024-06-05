@@ -29,7 +29,7 @@ Below, I have provided the code to produce dataframes with county and tract leve
 
 ### Import dependencies
 
-```{r echo=T, results='hide'}
+```{r echo=T, results='hide', warning=FALSE, message=FALSE}
 # use this block for imports
 library(leaflet) # for mapping
 library(sf) # for mapping
@@ -44,6 +44,8 @@ Get to: The CSX train runs through Hyattsville, which has XX% white and xx% blac
 
 
 ## Mapping coal export locations
+
+In Excel, I filtered the original global dataset to only coal export locations in the United States. That is the dataset that is imported here. The original data can be found and downloaded [here](https://globalenergymonitor.org/projects/global-coal-terminals-tracker/).
 
 We have our demographic data at a county and tract level, but we will be using counties for visualization since they render significantly faster in our browser. Tract-level data is available in the data folder.
 
