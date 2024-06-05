@@ -24,14 +24,15 @@ This story would feature visual components like maps and other data graphics and
 To complete this high level demographic analysis, I will need to begin working with train route shapefiles as a next step. 
 
 
-Below, I have provided the code to produce dataframes with county and tract level demographic information, including race/ethnicity, poverty rate, and median income. These dataframes are stored in the `census_tract_stats` and `census_county_stats` variables. 
+Below, I have provided the code to produce dataframes with county and tract level demographic information, including race/ethnicity, poverty rate, and median income. These dataframes are stored as `census_tract_stats` and `census_county_stats` in the data directory. 
 
 
 ### Import dependencies
 
 ```{r echo=T, results='hide'}
 # use this block for imports
-library()
+library(leaflet) # for mapping
+library(sf) # for mapping
 
 ```
 
@@ -40,3 +41,42 @@ library()
 Task for tonight: render demographic profiles of Silver Spring, Hyattsville and Harpers Ferry WV.
 
 Get to: The CSX train runs through Hyattsville, which has XX% white and xx% black, hispanic % and the median income. and compare that to means for the demographics and medians for income statewide
+
+
+## Mapping coal export locations
+
+We have our demographic data at a county and tract level, but we will be using counties for visualization since they render significantly faster in our browser. Tract-level data is available in the data folder.
+
+```{r}
+# import point and shapefiles for mapping
+
+# Load point data
+data = read.csv("data/coal-export-terminals-us.csv")
+points_sf <- st_as_sf(data, coords = c("Longitude", "Latitude"), crs = 4269)
+
+# Load census county shapefiles
+census_counties <- st_read("data/all_census_counties_us.shp", quiet=TRUE)
+
+```
+```{r, warning=FALSE}
+# Create the map
+map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+  addTiles() %>%
+  setView(lng = -96.25, lat = 39.50, zoom = 4) %>% 
+  addPolygons(data = census_counties,
+              fillColor = "lightgray",
+              color = "gray",
+              weight = 1,
+              fillOpacity = 0.5) %>% 
+  addCircleMarkers(
+              data = points_sf,
+             color = "red",
+             opacity = 0.8,
+             weight = 2,
+             radius = 5)
+```
+
+```{r}
+map
+```
+
