@@ -21,6 +21,10 @@ Next steps include: creating buffers and performing a spatial join to merge our 
 
 This page includes two parts: importing Census demographic data and mapping coal export locations. This test workflow will examine three communities where CSX rail lines run: Prince George's County and Montgomery County in Maryland, and Jefferson County in West Virginia.
 
+
+{{< video train_clip.mov >}}
+
+
 ### Import dependencies
 
 ```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
