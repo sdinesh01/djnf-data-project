@@ -3,15 +3,14 @@ project:
   output-dir: docs
 
 website:
-  title: ""
-  sidebar:
-    style: "docked"
-    search: false
-    contents:
-      - section: "Data collection"
-        contents:
-          - text: "Census Data"
-          - href: census_data.html
+  title: "Coal Dust Project"
+  search: false
+  navbar:
+    left:
+      - text: "Home"
+        href: index.html
+      - text: "Census Data"
+        href: census_data.html
 
 files:
   include:
@@ -22,6 +21,4 @@ files:
     - "coal_export_points.Rmd"
     - "coal_export_points.html"
     - "tidycensus_data.Rmd"        
-
-
 
