@@ -6,7 +6,7 @@ website:
   title: "Coal project"
   navbar:
     left:
-      -text: "Home"
+      - text: "Home"
         href: index.html
       - text: "Census Data"
         href: census_data.html
