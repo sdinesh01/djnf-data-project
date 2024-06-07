@@ -18,9 +18,9 @@ files:
   include:
     - index.html
     - census_data.html
+    - coal_export_points.html
   exclude:
     - "data/**"
     - "coal_export_points.Rmd"
-    - "coal_export_points.html"
     - "tidycensus_data.Rmd"        
 
