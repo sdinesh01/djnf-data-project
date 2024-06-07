@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Coal dust project"
+  title: "Coal Dust Project"
   search: false
   navbar:
     left:
