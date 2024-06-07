@@ -3,14 +3,14 @@ project:
   output-dir: docs
 
 website:
-  title: "Coal Dust Project"
+  title: "Coal dust project"
   search: false
   navbar:
     left:
       - text: "Home"
         href: index.html
       - text: "Census Data"
-        href: census_data.html
+        href: tidycensus_data.html
 
 files:
   include:
