@@ -5,9 +5,9 @@ website:
   title: "Coal exports"
   navbar:
     left:
-      - href: docs/index.html
+      - href: index.qmd
         text: Home
-      - data_collection/tidycensus_data.html
+      - tidycensus_data.qmd
 
 format:
   html:
