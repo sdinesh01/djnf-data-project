@@ -18,7 +18,7 @@ files:
   include:
     - index.html
     - census_data.html
-    - coal_export_points.html
+    - coal_exports.html
   exclude:
     - "data/**"
     - coal_export_points.html
