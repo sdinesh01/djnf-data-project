@@ -1,0 +1,11 @@
+project:
+  type: website
+  output-dir: docs
+  navbar:
+    background: primary
+    left:
+      - text: "Home"
+        href: index.html
+      - text: "Census Data"
+        href: census_data.html
+
