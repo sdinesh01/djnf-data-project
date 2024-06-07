@@ -5,7 +5,7 @@ date: "2024-06-03"
 output: html_document
 ---
 
-### note 
+### About this page
 
 Below, I have provided the code to produce dataframes with county and tract level demographic information, including race/ethnicity, poverty rate, and median income. These dataframes are stored in the `census_tract_stats` and `census_county_stats` variables. These dataframes are written to csv files. 
 
@@ -14,7 +14,7 @@ A future iteration of this code will functionalize the process of retrieving nat
 
 ### Set up libraries
 
-```{r, warning=FALSE}
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 library(tidyverse)
 library(tidycensus)
 library(janitor)
@@ -37,7 +37,7 @@ fips_codes <- fips_codes
 
 ### Retrieve tract-level demographic data
 
-```{r}
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 
 ## Get list of states (Exclude non-states, except DC)
 states <- fips_codes %>%
@@ -90,7 +90,7 @@ write.csv(census_tract_stats, file = "data/census-tract-stats.csv", row.names = 
 
 ### Retrieve county-level demographic data
 
-```{r}
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 # Get county-level data for all states
 census_county_stats <- get_acs(geography = "county", variables = c( "B01001_001","B02001_002","B02001_003","B02001_004","B03001_003","B06012_002","B19013_001"), year = 2022) %>%
   select(GEOID, NAME, variable, estimate) %>%

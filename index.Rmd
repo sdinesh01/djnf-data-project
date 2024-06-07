@@ -73,7 +73,7 @@ maryland_stats <- get_acs(geography = "state", variables = c( "B01001_001","B020
   clean_names()
 ```
 
-```{r}
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 wva_stats <- get_acs(geography = "state", variables = c( "B01001_001","B02001_002","B02001_003","B02001_004","B03001_003","B06012_002","B19013_001"), state="West Virginia", year = 2022) %>%
   select(GEOID, variable, estimate) %>%
   pivot_wider(names_from = variable, values_from = estimate) %>%
