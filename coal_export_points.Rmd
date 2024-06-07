@@ -4,6 +4,7 @@ format:
   html:
     theme: cosmo
 ---
+
 ### About this page
 
 This page provides code to create a basic Leaflet point map. A future version of this map/code will use county and tract level data that has been joined with Census demographic data.
