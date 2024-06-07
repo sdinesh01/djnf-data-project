@@ -12,7 +12,7 @@ website:
       - text: "Census Data"
         href: tidycensus_data.html
       - text: "Mapping Coal Export Locations"
-        href: coal_export_points.html
+        href: coal_exports.html
 
 files:
   include:
