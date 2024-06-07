@@ -1,0 +1,163 @@
+---
+title: "Where's the coal? Export locations & demographics"
+author: "Shradha Dinesh"
+date: "`r Sys.Date()`"
+format:
+  html:
+    theme: cosmo
+---
+
+
+## Story memo
+
+This page seeks to present a test workflow for an upcoming Howard Center for Investigative Journalism project on freight trains that haul coal and pollute communities across the country with coal dust.
+
+Stories about particulate pollution in the industrial sector have exposed environmental consequences for the air, earth, and our waterways. This project would take the first comprehensive look at communities along coal transportation routes -- particularly relevant in the wake of major freight derailments, contamination events, and discussions about regulating the length and staff numbers aboard freight transport.
+
+The potential impact of this project could be increased investment (social and financial) for particulate monitoring sensors along transportation hubs and/or increased industrial regulation for coal transporters. The social impact would be increasing the public awareness of industrial air pollution or providing an explanation for the phenomenon in affected communities.
+
+This story would feature visual components like maps and other data graphics and photos and videos of coal trains and transportation routes.
+
+Next steps include: creating buffers and performing a spatial join to merge our demographic and geographic data. Then, I will take a look at demographic data at coal export locations nationwide. This analysis will precede a future analysis of complete train routes.
+
+This page includes two parts: importing Census demographic data and mapping coal export locations. This test workflow will examine three communities where CSX rail lines run: Prince George's County and Montgomery County in Maryland, and Jefferson County in West Virginia.
+
+### Import dependencies
+
+
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
+# use this block for imports
+library(leaflet) # for mapping
+library(sf) # for mapping
+library(janitor)
+library(tidyverse)
+library(tidycensus)
+```
+
+
+## Working with Census demographic data
+
+
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
+# Import demographic data
+census_county_stats = read.csv("data/census-county-stats.csv")
+
+# List of counties you want to filter for
+counties_to_keep <- c("Prince George's County", "Montgomery County", "Jefferson County")
+
+# List of states you want to filter for
+states_to_keep <- c("Maryland", "West Virginia")
+
+# Filter the data frame
+filtered_df <- census_county_stats[census_county_stats$county %in% counties_to_keep & census_county_stats$state %in% states_to_keep, ]
+```
+
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
+# Get state figures for comparison
+
+maryland_stats <- get_acs(geography = "state", variables = c( "B01001_001","B02001_002","B02001_003","B02001_004","B03001_003","B06012_002","B19013_001"), state="Maryland", year = 2022) %>%
+  select(GEOID, variable, estimate) %>%
+  pivot_wider(names_from = variable, values_from = estimate) %>%
+  rename(
+    total_pop = B01001_001,
+    white_pop = B02001_002,
+    black_pop = B02001_003,
+    native_pop = B02001_004,
+    hispanic_pop = B03001_003,
+    poverty_pop = B06012_002,
+    median_income = B19013_001
+  ) %>%
+  mutate(pct_white = round(white_pop/total_pop, 2) * 100,
+         pct_nonwhite = 100 - round(white_pop/total_pop, 2) * 100,
+         pct_black = round(black_pop/total_pop, 2) * 100,
+         pct_native = round(native_pop/total_pop, 2) * 100,
+         pct_hispanic = round(hispanic_pop/total_pop, 2) * 100,
+         pct_poverty = round(poverty_pop/total_pop, 2) * 100
+         ) %>%
+  clean_names()
+```
+
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
+wva_stats <- get_acs(geography = "state", variables = c( "B01001_001","B02001_002","B02001_003","B02001_004","B03001_003","B06012_002","B19013_001"), state="West Virginia", year = 2022) %>%
+  select(GEOID, variable, estimate) %>%
+  pivot_wider(names_from = variable, values_from = estimate) %>%
+  rename(
+    total_pop = B01001_001,
+    white_pop = B02001_002,
+    black_pop = B02001_003,
+    native_pop = B02001_004,
+    hispanic_pop = B03001_003,
+    poverty_pop = B06012_002,
+    median_income = B19013_001
+  ) %>%
+  mutate(pct_white = round(white_pop/total_pop, 2) * 100,
+         pct_nonwhite = 100 - round(white_pop/total_pop, 2) * 100,
+         pct_black = round(black_pop/total_pop, 2) * 100,
+         pct_native = round(native_pop/total_pop, 2) * 100,
+         pct_hispanic = round(hispanic_pop/total_pop, 2) * 100,
+         pct_poverty = round(poverty_pop/total_pop, 2) * 100
+         ) %>%
+  clean_names()
+```
+
+```{=html}
+<iframe src='https://flo.uri.sh/visualisation/18259899/embed' title='Interactive or visual content' class='flourish-embed-iframe' frameborder='0' scrolling='no' style='width:100%;height:600px;' sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18259899/?utm_source=embed&utm_campaign=visualisation/18259899' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div>
+```
+
+Transport trains run through Hyattsville, Maryland (located in Prince George's County), which is 14% white, 61% Black, 20% Hispanic, and has a 9% poverty rate. The median household income in PG County is \$97935.
+
+In Montgomery County (where Silver Spring is located), the population is 47% white, 19% Black, 20% Hispanic, and has a 7% poverty rate. The median household income in Montgomery County is \$125,583.
+
+Statewide, the population is 51% white, 30% Black, 11% Hispanic, and has a 9% poverty rate. The median household income is \$98,461.
+
+
+```{=html}
+<iframe src='https://flo.uri.sh/visualisation/18260324/embed' title='Interactive or visual content' class='flourish-embed-iframe' frameborder='0' scrolling='no' style='width:100%;height:600px;' sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18260324/?utm_source=embed&utm_campaign=visualisation/18260324' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div>
+```
+
+In Jefferson County, West Virginia -- where Harpers Ferry is located -- the population is 84% white, 5% Black, 6% Hispanic, and has a 9% poverty rate. The median household income in Montgomery County is \$93,744.
+
+Statewide, the population is 91% white, 3% Black, 2% Hispanic, and has a 16% poverty rate. The median household income in West Virginia is \$55,217.
+
+## Mapping coal export locations
+
+In Excel, I filtered the original global dataset to only coal export locations in the United States. That is the dataset that is imported here. The original data can be found and downloaded [here](https://globalenergymonitor.org/projects/global-coal-terminals-tracker/).
+
+We have our demographic data at a county and tract level, but we will be using counties for visualization since they render significantly faster in our browser. Tract-level data is available in [the data folder](https://github.com/sdinesh01/djnf-data-project/tree/main/data).
+
+
+```{r}
+# import point and shapefiles for mapping
+
+# Load point data
+data = read.csv("data/coal-export-terminals-us.csv")
+points_sf <- st_as_sf(data, coords = c("Longitude", "Latitude"), crs = 4269)
+
+# Load census county shapefiles
+census_counties <- st_read("data/all_census_counties_us.shp", quiet=TRUE)
+
+```
+
+```{r, warning=FALSE}
+# Create the map
+# Quiet parameter turns off leaflet output text when it imports shapefile
+map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+  addTiles() %>%
+  setView(lng = -96.25, lat = 39.50, zoom = 4) %>% 
+  addPolygons(data = census_counties,
+              fillColor = "lightgray",
+              color = "gray",
+              weight = 1,
+              fillOpacity = 0.5) %>% 
+  addCircleMarkers(
+              data = points_sf,
+             color = "red",
+             opacity = 0.8,
+             weight = 2,
+             radius = 5)
+```
+
+```{r}
+map
+```
+
