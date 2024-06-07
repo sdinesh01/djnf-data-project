@@ -358,49 +358,19 @@ via TidyCensus</h1>
 </div>
 
 
-<div id="story-memo" class="section level2">
-<h2>Story memo</h2>
-<p>I will work on learning the TidyCensus R package to retrieve
-demographic data for all census tracts and counties nationally. Later, I
-will work with train route shapefiles, creating buffers and performing a
-spatial join to merge our demographic and geographic data. By the end of
-this week, I will have completed a high-level summary analysis of
-demographics for a few cities/towns along a specific coal (or train)
-route.</p>
-<p>Stories about particulate pollution in the industrial sector have
-described the air, earth, and our waterways. This would be the first
-comprehensive look at towns along coal transportation routes –
-particularly prescient in the wake of major freight derailments,
-contamination events, and discussions about regulating the length and
-staff numbers aboard freight transport.</p>
-<p>The potential impact of this project could be increased investment
-(social and financial) for particulate monitoring sensors along
-transportation hubs and/or increased industrial regulation for coal
-transporters. The social impact would be increasing the public awareness
-of industrial air pollution or providing an explanation for the
-phenomenon in affected communities.</p>
-<p>This story would feature visual components like maps and other data
-graphics and photos and videos of coal trains and transportation
-routes.</p>
-<p>To complete this high level demographic analysis, I will need to
-begin working with train route shapefiles as a next step.</p>
+<div id="note" class="section level3">
+<h3>note</h3>
 <p>Below, I have provided the code to produce dataframes with county and
 tract level demographic information, including race/ethnicity, poverty
 rate, and median income. These dataframes are stored in the
 <code>census_tract_stats</code> and <code>census_county_stats</code>
-variables.</p>
+variables. These dataframes are written to csv files.</p>
+<p>A future iteration of this code will functionalize the process of
+retrieving nationwide county and tract data in an R script.</p>
+</div>
 <div id="set-up-libraries" class="section level3">
 <h3>Set up libraries</h3>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.3.3</code></pre>
-<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.3.3</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
@@ -411,10 +381,8 @@ variables.</p>
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>library(tidycensus)</code></pre>
-<pre><code>## Warning: package &#39;tidycensus&#39; was built under R version 4.3.3</code></pre>
-<pre class="r"><code>library(janitor)</code></pre>
-<pre><code>## Warning: package &#39;janitor&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>library(tidycensus)
+library(janitor)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;janitor&#39;
 ## 
@@ -422,8 +390,7 @@ variables.</p>
 ## 
 ##     chisq.test, fisher.test</code></pre>
 <pre class="r"><code># set api key for tidycensus
-# census_api_key(&quot;bfa9ab659f49cf70e25323523f09670cbe4b98e5&quot;, install=TRUE)
-# commenting out since already stored</code></pre>
+# census_api_key(&quot;API_KEY&quot;, install=TRUE)</code></pre>
 </div>
 <div id="instantiate-global-vars" class="section level3">
 <h3>Instantiate global vars</h3>
@@ -477,6 +444,8 @@ fips_codes &lt;- fips_codes %&gt;%
 census_tract_stats &lt;- census_tract_stats %&gt;%
   left_join(fips_codes, by = c(&quot;state_fips&quot;, &quot;county_fips&quot;)) %&gt;%
   select(geoid, state, county, starts_with(&quot;pct&quot;), median_income)</code></pre>
+<pre class="r"><code># write dataframe to csv
+write.csv(census_tract_stats, file = &quot;data/census-tract-stats.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 <div id="retrieve-county-level-demographic-data" class="section level3">
 <h3>Retrieve county-level demographic data</h3>
@@ -503,7 +472,8 @@ census_county_stats &lt;- get_acs(geography = &quot;county&quot;, variables = c(
   clean_names() %&gt;% 
   separate(name, into = c(&quot;county&quot;, &quot;state&quot;), sep = &quot;, &quot;)</code></pre>
 <pre><code>## Getting data from the 2018-2022 5-year ACS</code></pre>
-</div>
+<pre class="r"><code># write dataframe to csv
+write.csv(census_county_stats, file = &quot;data/census-county-stats.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 
 
