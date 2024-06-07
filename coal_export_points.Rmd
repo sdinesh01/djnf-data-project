@@ -1,13 +1,16 @@
 ---
-title: "coal_exports"
-author: "Shradha Dinesh"
-date: "2024-06-04"
-output: html_document
+title: "Coal Export Locations"
+format:
+  html:
+    theme: cosmo
 ---
+### About this page
 
-## import libraries
+This page provides code to create a basic Leaflet point map. A future version of this map/code will use county and tract level data that has been joined with Census demographic data.
 
-```{r}
+### Import libraries
+
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 library(tigris)
 library(sf)
 library(leaflet)
@@ -16,14 +19,16 @@ library(janitor)
 library(tidycensus)
 ```
 
-## data import
+### Data import
 
 In Excel, I filtered the original global dataset to only coal export locations in the United States. That is the dataset that is imported here. The original data can be found and downloaded [here](https://globalenergymonitor.org/projects/global-coal-terminals-tracker/).
 
-```{r}
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 data = read.csv("data/coal-export-terminals-us.csv")
-data
 ```
+
+### Download shapefiles for counties and tracts
+
 ```{r}
 # Download the census tract shapefiles for all states from tigris package
 
@@ -46,17 +51,14 @@ data
 #st_write(census_counties_us, "data/all_census_counties_us.shp")
 ```
 
+### Initialize a point map with Leaflet 
 
-### initialize a point map with leaflet 
-
-
-```{r}
-
+```{r, echo=T, results='hide', warning=FALSE, message=FALSE}
 # Load point data
 
 points_sf <- st_as_sf(data, coords = c("Longitude", "Latitude"), crs = 4269)
 
-# Load census tract shapefiles
+# Load census tract shapefiles -- uncomment if you want a tract-level map
 #census_tracts <- st_read("data/all_census_tracts_us.shp")
 
 # Load census county shapefiles
@@ -66,9 +68,10 @@ census_counties <- st_read("data/all_census_counties_us.shp")
 
 ```
 
+### Draw the map
 
-```{r}
-# Create the map
+```{r, warning=FALSE}
+
 map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
   addTiles() %>%
   setView(lng = -96.25, lat = 39.50, zoom = 4) %>% 
@@ -84,7 +87,7 @@ map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
              weight = 2,
              radius = 5)
 ```
-```{r}
+```{r, warning=FALSE}
 map
 ```
 
