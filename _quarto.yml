@@ -10,3 +10,10 @@ website:
         href: index.html
       - text: "Census Data"
         href: census_data.html
+
+files:
+  exclude:
+    - "data/**"
+    - "coal_export_points.Rmd"
+    - "coal_export_points.html"
+    - "tidycensus_data.Rmd"        
