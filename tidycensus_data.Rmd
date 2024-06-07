@@ -1,7 +1,5 @@
 ---
 title: "County & Tract-level demographic data via TidyCensus"
-author: "Shradha Dinesh"
-date: "2024-06-03"
 format:
   html:
     theme: cosmo
