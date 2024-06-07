@@ -5,13 +5,13 @@ project:
 website:
   title: ""
   sidebar:
-  style: "docked"
-  search: false
-  contents:
-    - section: "Data collection"
-      contents:
-        - text: "Census Data"
-        - href: census_data.html
+    style: "docked"
+    search: false
+    contents:
+      - section: "Data collection"
+        contents:
+          - text: "Census Data"
+          - href: census_data.html
 
 files:
   include:
