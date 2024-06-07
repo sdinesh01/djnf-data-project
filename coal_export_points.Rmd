@@ -38,12 +38,12 @@ data
 # we're repeating the above process but with counties
 # keep the tract shapefiles in our data directory so we can do a more granular analysis locally
 
-census_counties_us <- counties(cb=TRUE)
-census_counties_us <-  st_transform(census_counties_us, 4269)
+#census_counties_us <- counties(cb=TRUE)
+#census_counties_us <-  st_transform(census_counties_us, 4269)
 
 # save county-level shapes to the working data directory
 # commenting out since file exists
-st_write(census_counties_us, "data/all_census_counties_us.shp")
+#st_write(census_counties_us, "data/all_census_counties_us.shp")
 ```
 
 
