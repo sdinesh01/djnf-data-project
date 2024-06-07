@@ -21,6 +21,5 @@ files:
     - coal_exports.html
   exclude:
     - "data/**"
-    - coal_export_points.html
    
 
