@@ -6,8 +6,6 @@ format:
 ---
 
 
-[Go to Home](index.html)
-
 ### About this page
 
 Below, I have provided the code to produce dataframes with county and tract level demographic information, including race/ethnicity, poverty rate, and median income. These dataframes are stored in the `census_tract_stats` and `census_county_stats` variables. These dataframes are written to csv files. 
